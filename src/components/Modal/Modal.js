@@ -27,10 +27,11 @@ export default class Modal extends Component {
   };
 
   render() {
+    const { url } = this.props;
     return createPortal(
       <div className={s.Overlay} onClick={this.handleBackdropClick}>
         <div className={s.Modal}>
-          <img src={this.props.url} alt="" />
+          <img src={url} alt="Gallery item" />
         </div>
       </div>,
       modalRoot,

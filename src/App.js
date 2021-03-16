@@ -59,7 +59,7 @@ class App extends Component {
   };
 
   showImageModal = url => {
-    console.log(url);
+    // console.log(url);
     this.setState({ largeImage: url });
     this.toggleModal();
   };
