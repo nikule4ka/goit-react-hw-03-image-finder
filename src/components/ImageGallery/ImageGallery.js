@@ -9,12 +9,11 @@ function ImageGallery({ images, onClick }) {
     <ul className={s.ImageGallery}>
       {images.map(({ id, webformatURL, tags, largeImageURL }) => (
         <ImageGalleryItem
-          id={id}
+          key={id}
           src={webformatURL}
           alt={tags}
-          onClick={() => {
-            onClick(largeImageURL);
-          }}
+          largeImageURL={largeImageURL}
+          onClick={() => onClick(largeImageURL)}
         />
       ))}
     </ul>
@@ -24,7 +23,7 @@ function ImageGallery({ images, onClick }) {
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
       tags: PropTypes.string.isRequired,
       largeImageURL: PropTypes.string.isRequired,
