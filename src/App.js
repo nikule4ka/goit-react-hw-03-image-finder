@@ -16,6 +16,8 @@ class App extends Component {
     error: null,
     showModal: false,
     largeImage: null,
+    totalHits: null,
+    perPage: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,10 +43,11 @@ class App extends Component {
     this.setState({ isLoading: true });
 
     fetchImages(options)
-      .then(hits => {
+      .then(({hits, totalHits}) => {
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
           currentPage: prevState.currentPage + 1,
+          totalHits,
         }));
 
         if (currentPage !== 1) {
@@ -71,8 +74,8 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, error, showModal, largeImage } = this.state;
-    const shouldLoadMoreBtn = images.length > 0 && !isLoading;
+    const { images, isLoading, error, showModal, largeImage,currentPage, totalHits, perPage } = this.state;
+    const shouldLoadMoreBtn = totalHits > currentPage * perPage
     return (
       <div className="App">
         <Searchbar onSubmit={this.onChangeQuery} />
