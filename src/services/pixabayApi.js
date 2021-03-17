@@ -8,7 +8,7 @@ function fetchImages({ searchQuery = '', currentPage = 1, perPage = 12 }) {
     .get(
       `${api}q=${searchQuery}&page=${currentPage}&key=${apiKey}d&image_type=photo&orientation=horizontal&per_page=${perPage}`,
     )
-    .then(response => response.data.hits);
+    .then(response => {response.data.hits, response.data.totalHits});
 }
 
 export { fetchImages };
