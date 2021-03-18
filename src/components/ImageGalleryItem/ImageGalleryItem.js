@@ -7,7 +7,9 @@ function ImageGalleryItem({ id, src, alt, largeImageURL, onClick }) {
         src={src}
         alt={alt}
         className={s.ImageGalleryItemImage}
-        onClick={onClick}
+        onClick={() => {
+          onClick(largeImageURL);
+        }}
         data-source={largeImageURL}
       />
     </li>

@@ -16,8 +16,6 @@ class App extends Component {
     error: null,
     showModal: false,
     largeImage: null,
-    totalHits: null,
-    perPage: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -43,23 +41,29 @@ class App extends Component {
     this.setState({ isLoading: true });
 
     fetchImages(options)
-      .then(({hits, totalHits}) => {
+      .then(({ hits, total }) => {
+        console.log({ total, hits });
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
+          total,
           currentPage: prevState.currentPage + 1,
-          totalHits,
         }));
-
-        if (currentPage !== 1) {
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth',
-          });
-        }
+        this.ScrollTo();
       })
-      .catch(error => this.setState({ error }))
+      .catch(error =>
+        this.setState({ error: 'Oops, something wrong. Please, try again' }),
+      )
       .finally(() => this.setState({ isLoading: false }));
   };
+
+  ScrollTo() {
+    if (this.state.currentPage !== 1) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }
 
   showImageModal = url => {
     // console.log(url);
@@ -74,23 +78,27 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoading, error, showModal, largeImage,currentPage, totalHits, perPage } = this.state;
-    const shouldLoadMoreBtn = totalHits > currentPage * perPage
+    const {
+      images,
+      isLoading,
+      error,
+      showModal,
+      largeImage,
+      total,
+    } = this.state;
+
+    const shouldLoadMoreBtn =
+      images.length > 0 && images.length < total && !isLoading;
     return (
       <div className="App">
         <Searchbar onSubmit={this.onChangeQuery} />
-
-        {error && (
-          <h3 className="Error__title">
-            Oops, something wrong. Please, try again
-          </h3>
-        )}
 
         <ImageGallery images={images} onClick={this.showImageModal} />
 
         {isLoading && <Loader />}
 
         {shouldLoadMoreBtn && <Button onClick={this.getImages} />}
+        {error && <h3 className="Error__title">{error}</h3>}
 
         {showModal && <Modal onClose={this.toggleModal} url={largeImage} />}
       </div>

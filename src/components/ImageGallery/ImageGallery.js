@@ -13,7 +13,7 @@ function ImageGallery({ images, onClick }) {
           src={webformatURL}
           alt={tags}
           largeImageURL={largeImageURL}
-          onClick={() => onClick(largeImageURL)}
+          onClick={onClick}
         />
       ))}
     </ul>
