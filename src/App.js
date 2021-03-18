@@ -42,7 +42,7 @@ class App extends Component {
 
     fetchImages(options)
       .then(({ hits, total }) => {
-        console.log({ total, hits });
+        // console.log({ total, hits });
         this.setState(prevState => ({
           images: [...prevState.images, ...hits],
           total,
