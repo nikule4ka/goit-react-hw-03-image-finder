@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import './App.css';
 import { fetchImages } from './services/pixabayApi';
 import Searchbar from './components/Searchbar';
@@ -13,7 +14,6 @@ class App extends Component {
     currentPage: 1,
     searchQuery: '',
     isLoading: false,
-    error: null,
     showModal: false,
     largeImage: null,
   };
@@ -29,7 +29,6 @@ class App extends Component {
       searchQuery: query,
       currentPage: 1,
       images: [],
-      error: null,
     });
   };
 
@@ -50,9 +49,7 @@ class App extends Component {
         }));
         this.ScrollTo();
       })
-      .catch(error =>
-        this.setState({ error: 'Oops, something wrong. Please, try again' }),
-      )
+      .catch(error => toast.error('Oops, something wrong. Please, try again'))
       .finally(() => this.setState({ isLoading: false }));
   };
 
@@ -78,14 +75,7 @@ class App extends Component {
   };
 
   render() {
-    const {
-      images,
-      isLoading,
-      error,
-      showModal,
-      largeImage,
-      total,
-    } = this.state;
+    const { images, isLoading, showModal, largeImage, total } = this.state;
 
     const shouldLoadMoreBtn =
       images.length > 0 && images.length < total && !isLoading;
@@ -98,7 +88,8 @@ class App extends Component {
         {isLoading && <Loader />}
 
         {shouldLoadMoreBtn && <Button onClick={this.getImages} />}
-        {error && <h3 className="Error__title">{error}</h3>}
+
+        <ToastContainer autoClose={2000} />
 
         {showModal && <Modal onClose={this.toggleModal} url={largeImage} />}
       </div>
